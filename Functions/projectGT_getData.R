@@ -76,3 +76,24 @@ plot_trend <- function(google_trends, ebird_data, IsLowess = T, species_name){
         lines(bird_trend)
       }
 }
+
+build_time_series <- function(google_trends, ebird_data){
+  smooth_gtrends <- smooth.spline(
+    x = google_trends$trend$start,
+    y = google_trends$trend[[3]],
+    cv = TRUE
+  )
+
+  smooth_ebird <- smooth.spline(
+    x = ebird_data$date,
+    y = ebird_data$frequency,
+    cv = TRUE
+  )
+
+  time_series <- data.frame(x = smooth_gtrends$x)
+
+  time_series$google_trends <- scale(smooth_gtrends$x)
+  time_series$ebird <- scale(predict(smooth_ebird,data.frame(x = smooth_gtrends$x))$y)
+
+  return(time_series)
+}
