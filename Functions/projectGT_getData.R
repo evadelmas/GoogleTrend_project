@@ -93,3 +93,24 @@ get_gbif <- function(start_date, species_name, states = "US"){
   all_data$date <- ymd(all_data$date)
   return(all_data)
 }
+
+build_time_series <- function(google_trends, ebird_data){
+  smooth_gtrends <- smooth.spline(
+    x = google_trends$trend$start,
+    y = google_trends$trend[[3]],
+    cv = TRUE
+  )
+
+  smooth_ebird <- smooth.spline(
+    x = ebird_data$date,
+    y = ebird_data$frequency,
+    cv = TRUE
+  )
+
+  time_series <- data.frame(x = smooth_gtrends$x)
+
+  time_series[,2] <- scale(smooth_gtrends$y)
+  time_series[,3] <- scale(predict(smooth_ebird,data.frame(x = smooth_gtrends$x))$y)
+
+  return(time_series)
+}
