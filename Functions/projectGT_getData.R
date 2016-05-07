@@ -1,24 +1,6 @@
-<<<<<<< HEAD
+source("Functions/week_starts.R")
+
 get_trends <- function(species, start_date, states = "US"){
-  #Get the google trends for a particular species as keyword for the states and years selected
-=======
-# push try
-library(gtrendsR)
-library(getPass)
-library(lubridate)
-library(rebird)
-library(dplyr)
-
-#Connect to your Google account to be able to access the google trends
-mail_adress <- "your.email@adress.ca"
-ed <- gconnect(mail_adress, getPass::getPass())
-
-#Select for wich species you want to do the analysis abd from when
-species <- c("American Robin")
-start_date <- "2006-01-01 EDT"
-
-get_trends <- function(species, start_date){
->>>>>>> b7ff4d60f09f67b7ed624deaaeafeefb22263761
   for (i in 1:length(species)) {
     keyword <- species[i]
     res <- gtrends(keyword, geo = states)
@@ -57,7 +39,6 @@ get_ebird <- function(species, start_date){
 
   #formatting the dates for the bird stuff
   # day of the year vector --------------------------------------------------
-  source("week_starts.R")
 
   week_starts2 <- rep(week_starts, length(2006:2015))
   bird_df2 <- cbind(bird_df, week_starts2)
@@ -67,7 +48,7 @@ get_ebird <- function(species, start_date){
   return(bird_df)
 }
 
-plot_trend <- function(google_trends, ebird_data, IsLowess = T, species){
+plot_trend <- function(google_trends, ebird_data, IsLowess = T, species_name){
       res <- google_trends
       bird_df <- ebird_data
 

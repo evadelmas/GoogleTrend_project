@@ -4,6 +4,8 @@ library(lubridate)
 library(rebird)
 library(dplyr)
 
+source("Functions/projectGT_getData.R")
+
 #Connect to your Google account to be able to access the google trends
 mail_adress <- "your.email@adress.ca"
 user_id <- gconnect(mail_adress, getPass::getPass())
@@ -14,4 +16,4 @@ start_date <- "2006-01-01 EDT"
 
 trends <- get_trends(species, start_date)
 birds <- get_ebird(species, start_date)
-plot_trend(trends, birds, species)
+plot_trend(trends, birds, species, IsLowess = TRUE)
