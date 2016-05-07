@@ -19,6 +19,8 @@ trends <- get_trends(species, stardate)
 birds <- get_ebird(species, startdate)
 plot_trend(trends, birds, species, IsLowess = TRUE)
 
+ts <- build_time_series(trends, birds)
+
 monarch_species <- c("Danaus plexippus")
 trends_monarch <- get_trends(monarch_species, startdate)
 data_monarch <- get_gbif(startdate, monarch_species[1])
