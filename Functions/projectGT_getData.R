@@ -1,7 +1,7 @@
 source("Functions/week_starts.R")
 
-get_trends <- function(species, start_date, states = "US"){
-  for (i in 1:length(species)) {
+get_trends <- function(species_name, start_date, states = "US"){
+  for (i in 1:length(species_name)) {
     keyword <- species[i]
     res <- gtrends(keyword, geo = states)
     res$trend <- res$trend[
@@ -12,7 +12,7 @@ get_trends <- function(species, start_date, states = "US"){
   return(res)
 }
 
-get_ebird <- function(species, start_date){
+get_ebird <- function(species_name, start_date){
   year_start <- as.numeric(strsplit(start_date, split = "-")[[1]][1])
   bird_df <- data.frame(comName = character(),
                         monthQt = character(),
@@ -26,7 +26,7 @@ get_ebird <- function(species, start_date){
                            startmonth = 1,
                            endmonth = 12,
                            loc = "US-NY") %>% as.data.frame()
-    bird_amer <- bird_test %>% filter(comName == species)
+    bird_amer <- bird_test %>% filter(comName == species_name)
     year_vec <- rep(i, dim(bird_amer)[1])
     bird_amer2 <- cbind(bird_amer, year_vec)
     bird_df <- rbind(bird_df,
@@ -48,7 +48,7 @@ get_ebird <- function(species, start_date){
   return(bird_df)
 }
 
-plot_trend <- function(google_trends, ebird_data, IsLowess = T, species_name){
+plot_trend <- function(google_trends, ebird_data, IsLowess = TRUE, species_name){
       res <- google_trends
       bird_df <- ebird_data
 
@@ -75,4 +75,21 @@ plot_trend <- function(google_trends, ebird_data, IsLowess = T, species_name){
         bird_trend <- lowess(bird_df$date, bird_df$frequency, f = 0.06)
         lines(bird_trend)
       }
+}
+
+get_gbif <- function(start_date, species_name, states = "US"){
+  start_date <- as.numeric(strsplit(start_date, split = "-")[[1]][1])
+  years <- c(start_date:2016)
+  months <- c(1:12)
+  all_data <- data.frame()
+  for (y in years){
+    raw_data <- occ_search(species = species_name, country = states, year = y)
+    sub_data <- data.frame(cbind(raw_data$data$decimalLatitude, raw_data$data$decimalLongitude, raw_data$data$year, raw_data$data$month, raw_data$data$day))
+    names(sub_data) <- c("Lat", "Long", "year", "month", "day")
+    all_data <- rbind(all_data, sub_data)
+    }
+  all_data$date <- apply(all_data[, c(3, 4, 5)], 1, paste, collapse = "/")
+  all_data <- subset(all_data, all_data$day !=0)
+  all_data$date <- ymd(all_data$date)
+  return(all_data)
 }
