@@ -92,8 +92,8 @@ build_time_series <- function(google_trends, ebird_data){
 
   time_series <- data.frame(x = smooth_gtrends$x)
 
-  time_series$google_trends <- scale(smooth_gtrends$x)
-  time_series$ebird <- scale(predict(smooth_ebird,data.frame(x = smooth_gtrends$x))$y)
+  time_series[,2] <- scale(smooth_gtrends$y)
+  time_series[,3] <- scale(predict(smooth_ebird,data.frame(x = smooth_gtrends$x))$y)
 
   return(time_series)
 }
