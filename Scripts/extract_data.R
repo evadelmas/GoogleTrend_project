@@ -10,7 +10,7 @@ library(rgbif)
 source("Functions/projectGT_getData.R")
 
 #Connect to your Google account to be able to access the google trends
-mail_adress <- "eva.delmas@gmail.com"
+mail_adress <- "your.email@adress.com"
 user_id <- gconnect(mail_adress, getPass::getPass())
 
 startdate <- "2006-01-01 EDT"
