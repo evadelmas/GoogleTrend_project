@@ -1,2 +1,5 @@
-# Google Trends as a proxy to phenology?
-This is actually empty
+# Ecological objective
+This project aims to explore the large-scale dynamics of migrating bird arrivals and insect emergence
+
+# Secondary objective
+Show the power of combining open data (Google Trends) and citizen science (EBird) to answer ecological questions
